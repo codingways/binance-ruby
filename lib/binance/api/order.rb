@@ -53,6 +53,25 @@ module Binance
                         api_secret_key: api_secret_key)
         end
 
+        def oco!(symbol: nil, listClientOrderId: nil, side: nil,
+          quantity: nil, limitClientOrderId: nil, price: nil, limitIcebergQty: nil, stopClientOrderId: nil, stopPrice: nil,
+          stopLimitPrice: nil, stopIcebergQty: nil, stopLimitTimeInForce: nil, newOrderRespType: false, recvWindow: nil, api_key: nil,
+          api_secret_key: nil)
+          timestamp = Configuration.timestamp
+          params = {
+            symbol: symbol, listClientOrderId: listClientOrderId,
+            side: side, quantity: quantity, limitClientOrderId: limitClientOrderId, price: price,
+            limitIcebergQty: limitIcebergQty, stopClientOrderId: stopClientOrderId, stopPrice: stopPrice, stopLimitPrice: stopLimitPrice,
+            stopIcebergQty: stopIcebergQty, stopLimitTimeInForce: stopLimitTimeInForce, newOrderRespType: newOrderRespType, recvWindow: recvWindow,
+            timestamp: timestamp
+          }.delete_if { |key, value| value.nil? }
+          ensure_required_create_keys!(params: params)
+          path = "/api/v3/order/oco"
+          Request.send!(api_key_type: :trading, method: :post, path: path,
+                        params: params, security_type: :trade, tld: Configuration.tld, api_key: api_key,
+                        api_secret_key: api_secret_key)
+        end
+
         def status!(orderId: nil, originalClientOrderId: nil, recvWindow: nil, symbol: nil,
                     api_key: nil, api_secret_key: nil)
           raise Error.new(message: "symbol is required") if symbol.nil?
