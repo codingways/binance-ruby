@@ -65,7 +65,6 @@ module Binance
             stopIcebergQty: stopIcebergQty, stopLimitTimeInForce: stopLimitTimeInForce, newOrderRespType: newOrderRespType, recvWindow: recvWindow,
             timestamp: timestamp
           }.delete_if { |key, value| value.nil? }
-          ensure_required_create_keys!(params: params)
           path = "/api/v3/order/oco"
           Request.send!(api_key_type: :trading, method: :post, path: path,
                         params: params, security_type: :trade, tld: Configuration.tld, api_key: api_key,
